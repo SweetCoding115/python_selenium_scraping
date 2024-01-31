@@ -5,7 +5,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import NoSuchElementException
 import openpyxl
 import re
-
+import os
 
 # enable headless mode in Selenium
 options = Options()
@@ -35,27 +35,38 @@ print(int(product_num),'items found.')
 page_num = 346
 print(346,'pages found.')
 
-# to load the workbook with its path
-Excelfile = openpyxl.load_workbook("Test.xlsx")
-print("Excel sheet is loaded.")
-# to identify active worksheet
-ExcelSheet = Excelfile.active
+# to check if Test.xlsx file already exists or not.
+if os.path.exists('Test.xlsx'):
+    # to load the workbook with its path
+    Excelfile = openpyxl.load_workbook("Test.xlsx")
+    print("Excel spreadsheet Test.xlsx is loaded.")
+    # to identify active worksheet
+    ExcelSheet = Excelfile.active
+else:
+    print('The Test.xlsx file does not exist')
+    # to create a new excel spreadsheet file and name it Test.xlsx.
+    Excelfile = openpyxl.Workbook()
+    ExcelSheet = workbook.active
+    print("the blank excel spreadsheet file is created initially.")
 print("active sheet is selected.")
 # to identify maximum rows count
 print ( ExcelSheet.max_row, 'rows')
 # to identify maximum columns count
 print ( ExcelSheet.max_column, 'columns')
 
-item_from_sheet = ExcelSheet.cell(row=1, column=1).value
+# sample code snippet 
+# item_from_sheet = ExcelSheet.cell(row=1, column=1).value
 count = 0
 while ExcelSheet.cell (row=count+1, column=2).value != None:
     count += 1
+
+# page parameter indicates that which page has been being scraped while it was terminated by any excuses
 page = int((count -2) / 60) + 1
 rest = count - ( page - 1 ) * 60 - 1
 driver_initial.quit()
 # # scraping search result
 
-
+# creating index row at the first line.
 ExcelSheet.cell (row=1, column=1).value = "Product Page Link:"
 ExcelSheet.cell (row=1, column=2).value = "Breadcrumb:"
 ExcelSheet.cell (row=1, column=3).value = "Product Title:"
@@ -72,7 +83,9 @@ ExcelSheet.cell (row=1, column=13).value = "Approval or Side Fitment:"
 ExcelSheet.cell (row=1, column=14).value = "Warranty:"
 ExcelSheet.cell (row=1, column=15).value = "OE Equivalent:"
 
+# initial value that indicates where to start scraping based on existing result it has already scraped before
 start_value = 0
+# initial value that indicates where did ealier process stop scraping based on existing result it has already scraped before
 stop_value = (page - 1) * 60
 print(page, stop_value)
 Excelfile.save ("Test.xlsx")
