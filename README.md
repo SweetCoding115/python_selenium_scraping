@@ -35,12 +35,12 @@ print(int(product_num),'items found.')
 # # searching pages...
 ```
 
-you need to install its dependencies before you ryn this code.
+you need to install its dependencies by running this command on your terminal before you run this python script.
 
 ```bash
 pip install openpyxl selenium regex
 ```
-then run this code to start scraping.
+then run this command on your terminal to start scraping.
 
 ```bash
 python scrape_new.py
